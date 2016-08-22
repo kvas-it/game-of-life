@@ -37,6 +37,28 @@ void GameOfLife::randomInit(const double probability) {
 	}
 }
 
+void GameOfLife::setInitConfig(const string init_config) {
+	randomInit(0);
+	size_t dx = 0;
+	size_t dy = 0;
+	size_t x0 = 100;
+	size_t y0 = 100;
+	for(size_t i = 0; i < init_config.size(); i++) {
+		char c = init_config[i];
+		switch (init_config[i]) {
+			case '\n':
+			case '|':
+				dx = 0;
+				dy++;
+				break;
+			case 'x':
+				grid[x0 + dx][y0 + dy] = 1;
+			default:
+				dx++;
+		} 
+	}
+}
+
 void GameOfLife::iterate() {
     for (size_t i = 0; i < width; ++i) {
 		for(size_t j = 0; j < height; ++j) {

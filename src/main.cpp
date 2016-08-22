@@ -12,9 +12,12 @@
 #include "ConfigFile.h"
 
 #include <iostream>
+#include <string>
 
 #define WHITE 1.0, 1.0, 1.0
 #define BLACK 0.0, 0.0, 0.0
+
+using std::string;
 
 // values are read from "game.config"
 GLint FPS = 24;
@@ -26,6 +29,7 @@ GLfloat bottom = 0.0;
 GLfloat top = 1.0;
 GLint game_width = 100;
 GLint game_height = 100;
+string init_config = "xxx|  x| x ";
 
 GameOfLife *game;
 
@@ -92,6 +96,8 @@ void readConfiguration(char* file) {
 	
 	config.readInto(game_width, "game_width" );
 	config.readInto(game_height, "game_height" );
+
+    config.readInto(init_config, "init_config");
 }
 
 bool checkConfiguration() {
@@ -134,8 +140,13 @@ int main(int argc, char **argv) {
 	glutDisplayFunc(display);
 	
 	game = new GameOfLife(game_width, game_height);
-	game->randomInit();
-		
+
+	if (init_config.size() == 0) {
+		game->randomInit();
+	} else {
+		game->setInitConfig(init_config);
+	}
+
 	update(0);
 	glutMainLoop();
 		
